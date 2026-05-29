@@ -914,8 +914,9 @@ function App() {
                 return;
             ws.send(`${op}\n${frameId++}\n\n${body ? JSON.stringify(body) : ""}`);
         }
+        var ws = null;
         function connect() {
-            const ws = new WebSocket(TV_WS_URL);
+            ws = new WebSocket(TV_WS_URL);
             wsRef.current = ws;
             ws.onopen = () => {
                 L("system", "MD WebSocket TCP open -- waiting for Atmosphere open frame...");
