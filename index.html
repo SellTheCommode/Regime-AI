@@ -4,9 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>ICT RegimeAI</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
 <style>
   * { box-sizing: border-box; }
   body { margin: 0; padding: 0; background: #000; color: #fff; font-family: monospace; }
@@ -16,39 +13,26 @@
   .pu { animation: pu 1.4s ease-in-out infinite; }
   @keyframes si { from{transform:translateY(-6px);opacity:0} to{transform:translateY(0);opacity:1} }
   .si { animation: si 0.25s ease-out; }
-  #loading {
-    position:fixed; inset:0; background:#000; display:flex;
-    flex-direction:column; align-items:center; justify-content:center; gap:16px;
-    z-index:9999; transition: opacity 0.5s;
-  }
-  #loading .dot {
-    width:8px; height:8px; border-radius:50%; background:#10b981;
-    animation: pu 1.4s ease-in-out infinite;
-  }
-  #loading .dots { display:flex; gap:8px; }
-  #loading .dots .dot:nth-child(2) { animation-delay:0.2s; }
-  #loading .dots .dot:nth-child(3) { animation-delay:0.4s; }
 </style>
 </head>
 <body>
-<div id="loading">
-  <div style="color:#10b981;font-size:20px;font-weight:bold;letter-spacing:2px">ICT RegimeAI</div>
-  <div style="color:#475569;font-size:11px">Starting...</div>
-  <div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
-</div>
-<div id="root"></div>
-<script>
-// Hide loading once page is interactive
-window.addEventListener('DOMContentLoaded', function() {
-  setTimeout(function() {
-    var l = document.getElementById('loading');
-    if(l) { l.style.opacity='0'; setTimeout(function(){l.remove();},500); }
-  }, 300);
-});
+<div id="root"><div style="display:flex;align-items:center;justify-content:center;height:100vh;flex-direction:column;gap:16px"><div style="color:#10b981;font-size:20px;font-weight:bold;letter-spacing:2px">ICT RegimeAI</div><div style="color:#475569;font-size:11px">Starting...</div></div></div>
 
-const { useState, useEffect, useRef, useCallback } = React;
-</script>
+<!-- Load React synchronously first -->
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<!-- Load Tailwind after React -->
+<script src="https://cdn.tailwindcss.com?plugins="></script>
+
+<!-- App runs after all above scripts are loaded -->
 <script>
+(function() {
+  'use strict';
+  var useState = React.useState;
+  var useEffect = React.useEffect;
+  var useRef = React.useRef;
+  var useCallback = React.useCallback;
+
 "use strict";
 // ===========================================================================
 // ICT FUTURES AI -- MARKET REGIME + STRATEGY ROTATION ENGINE
@@ -111,8 +95,13 @@ function atr(bars, p = 14) {
 function ema(arr, p) { const k = 2 / (p + 1); let e = arr[0]; return arr.map(v => { e = v * k + e * (1 - k); return e; }); }
 function vwap(bars) { let tv = 0, v = 0; bars.forEach(b => { const tp = (b.h + b.l + b.c) / 3; tv += tp * b.v; v += b.v; }); return v > 0 ? tv / v : bars[bars.length - 1].c; }
 function stdDev(arr) { const m = arr.reduce((s, v) => s + v, 0) / arr.length; return Math.sqrt(arr.reduce((s, v) => s + (v - m) ** 2, 0) / arr.length); }
-function slope(arr, n = 5) { if (arr.length < n)
-    return 0; const sl = arr.slice(-n); return (sl[sl.length - 1] - sl[0]) / (n - 1); }
+function slope(arr, n) {
+    var _n = n === undefined ? 5 : n;
+    if (arr.length < _n)
+        return 0;
+    var sl = arr.slice(-_n);
+    return (sl[sl.length - 1] - sl[0]) / (_n - 1);
+}
 function bodyRatio(bar) { return bar.h === bar.l ? 0 : Math.abs(bar.c - bar.o) / (bar.h - bar.l); }
 // --- 1. REGIME DETECTOR ---------------------------------------------------
 // Returns: regime label + details for each factor
@@ -328,13 +317,18 @@ function scoreSignal(sig, regime, rd, sess, recentResults) {
     return { score: Math.round(score), max: 100, breakdown };
 }
 // --- STRUCTURE HELPERS ----------------------------------------------------
-function swings(bars, lb = 3) { const out = []; for (let i = lb; i < bars.length - lb; i++) {
-    const sl = bars.slice(i - lb, i + lb + 1);
-    if (bars[i].h === Math.max(...sl.map(b => b.h)))
-        out.push({ i, type: "H", price: bars[i].h });
-    if (bars[i].l === Math.min(...sl.map(b => b.l)))
-        out.push({ i, type: "L", price: bars[i].l });
-} return out; }
+function swings(bars, lb) {
+    var _lb = lb === undefined ? 3 : lb;
+    var out = [];
+    for (var i = _lb; i < bars.length - _lb; i++) {
+        var sl = bars.slice(i - _lb, i + _lb + 1);
+        if (bars[i].h === Math.max(...sl.map(function (b) { return b.h; })))
+            out.push({ i: i, type: "H", price: bars[i].h });
+        if (bars[i].l === Math.min(...sl.map(function (b) { return b.l; })))
+            out.push({ i: i, type: "L", price: bars[i].l });
+    }
+    return out;
+}
 function structure(bars) {
     if (bars.length < 10)
         return { bias: "ranging", lastHH: null, lastLL: null, bos: null };
@@ -2030,6 +2024,7 @@ return (React.createElement("div", { className: "min-h-screen text-slate-100", s
             }))))));
 ReactDOM.createRoot(document.getElementById("root")).render(React.createElement(App));
 
+})();
 </script>
 </body>
 </html>
