@@ -1915,9 +1915,9 @@ function App() {
                             try {
                                 const demo = mode !== "full-auto";
                                 const base = demo ? "https://demo.tradovateapi.com/v1" : "https://live.tradovateapi.com/v1";
-                                const r = await fetch(`${base}/auth/accesstokenrequest`, {
+                                const r = await fetch(`https://ict-regime-proxy.onrender.com/auth`, {
                                     method: "POST", headers: { "Content-Type": "application/json" },
-                                    body: JSON.stringify({ name: creds.username, password: creds.password, appId: "ICTRegimeAI", appVersion: "3.0", cid: parseInt(creds.cid), sec: creds.sec, deviceId: "ict-regime-001" })
+                                    body: JSON.stringify({ name: creds.username, password: creds.password, appId: "ICTRegimeAI", appVersion: "3.0", cid: parseInt(creds.cid), sec: creds.sec, deviceId: "ict-regime-001", demo })
                                 });
                                 const d = await r.json();
                                 if (d.accessToken) {
