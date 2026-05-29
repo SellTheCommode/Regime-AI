@@ -1918,24 +1918,7 @@ function App() {
                                 const r = await fetch(`https://ict-regime-proxy.onrender.com/auth`, {
                                     method: "POST", headers: { "Content-Type": "application/json" },
                                     body: JSON.stringify({ name: creds.username, password: creds.password, appId: "ICTRegimeAI", appVersion: "3.0", cid: parseInt(creds.cid), sec: creds.sec, deviceId: "ict-regime-001", demo })
-                                });
-                                const d = await r.json();
-                                if (d.accessToken) {
-                                    setConnected(true);
-                                    L("system", `REST auth OK (${demo ? "demo" : "live"}) -- starting MD WebSocket feed`);
-                                   try {
-                                        const balRes = await fetch(`https://ict-regime-proxy.onrender.com/balance?demo=${demo}`, {
-                                            headers: { 'Authorization': `Bearer ${d.accessToken}` }
-                                        });
-                                        const balData = await balRes.json();
-                                        const equity = balData?.totalCashValue || balData?.cashBalance || balData?.[0]?.totalCashValue || balData?.[0]?.cashBalance;
-                                        if (equity && equity > 0) {
-                                            setBal({ available: equity, total: equity });
-                                            L("system", `Account balance loaded: $${equity.toLocaleString()}`);
-                                        }
-                                    } catch(e) {
-                                        L("warn", `Could not load balance: ${e.message}`);
-                                    }
+
                                     const cleanup = connectMD(d.accessToken, activeSyms);
                                     return cleanup;
                                 }
