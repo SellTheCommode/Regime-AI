@@ -933,12 +933,12 @@ function App() {
                 else if (raw.charAt(0) === "{")
                     frames = [JSON.parse(raw)];
                 else {
-                    L("system", "MD raw: " + raw.slice(0, 60));
+                    L("system","MD raw: "+raw.slice(0,200));
                     return;
                 }
             }
             catch (e) {
-                L("warn", "MD parse error: " + raw.slice(0, 80));
+                L("warn", "MD parse error: " + raw.slice(0,200));
                 return;
             }
             for (var fi = 0; fi < frames.length; fi++) {
