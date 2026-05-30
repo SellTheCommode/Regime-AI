@@ -1913,7 +1913,7 @@ function App() {
                             L("system", "Authenticating with Tradovate...");
                             setMdStatus("connecting");
                             try {
-                                const demo = mode !== "full-auto";
+                                const demo=false;
                                 const base = demo ? "https://demo.tradovateapi.com/v1" : "https://live.tradovateapi.com/v1";
                                 const r = await fetch(`https://ict-regime-proxy.onrender.com/auth`, {
                                     method: "POST", headers: { "Content-Type": "application/json" },
