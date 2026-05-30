@@ -1918,7 +1918,11 @@ function App() {
                                 const r = await fetch(`https://ict-regime-proxy.onrender.com/auth`, {
                                     method: "POST", headers: { "Content-Type": "application/json" },
                                     body: JSON.stringify({ name: creds.username, password: creds.password, appId: "ICTRegimeAI", appVersion: "3.0", cid: parseInt(creds.cid), sec: creds.sec, deviceId: "ict-regime-001", demo })
-
+                                });
+                                const d = await r.json();
+                                if (d.accessToken) {
+                                    setConnected(true);
+                                    L("system", `REST auth OK (${demo ? "demo" : "live"}) -- starting MD WebSocket feed`);
                                     const cleanup = connectMD(d.accessToken, activeSyms);
                                     return cleanup;
                                 }
