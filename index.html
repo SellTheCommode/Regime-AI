@@ -893,7 +893,7 @@ function App() {
                 next[sym] = b[b.length - 1].c; }); return next; });
         }, 4000);
         return () => clearInterval(t);
-    }, [activeSyms, mdConnected]);
+    }, [activeSyms]);
     // Tradovate WebSocket Market Data Feed
     const connectMD = useCallback((token, syms) => {
         if (wsRef.current) {
