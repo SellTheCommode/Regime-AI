@@ -1923,7 +1923,7 @@ function App() {
                                 if (d.accessToken) {
                                     setConnected(true);
                                     L("system", `REST auth OK (${demo ? "demo" : "live"}) -- starting MD WebSocket feed`);
-                                    const cleanup = connectMD(d.accessToken, activeSyms);
+                                    const cleanup=connectMD(d.mdAccessToken||d.accessToken,activeSyms);
                                     return cleanup;
                                 }
                                 else {
