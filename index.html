@@ -871,7 +871,7 @@ function App() {
     useEffect(() => { const t = setInterval(() => { setSession(getSession()); }, (60000)); return () => clearInterval(t); }, []);
     // Simulated bar generator -- runs only when WebSocket NOT connected
     useEffect(() => {
-        if (mdConnected)
+        if(liveMode.current)return;
             return; // live feed takes over -- stop simulator
         const t = setInterval(() => {
             setAllBars(prev => {
