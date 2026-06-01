@@ -623,7 +623,7 @@ function nextBar(bars, sym, bias = 0) {
     return { o: last.c, h: Math.max(last.c, c) + range * 0.2, l: Math.min(last.c, c) - range * 0.2, c: Math.round(c * 1000) / 1000, v: 300 + Math.random() * 1500 };
 }
 // --- TRADOVATE WEBSOCKET MARKET DATA FEED ---------------------------------
-// Connects to wss://md.tradovateapi.com/v1/websocket
+// Connects to wss://ict-regime-proxy.onrender.com/md
 // Streams real-time quote + DOM data for subscribed contracts
 // Bar aggregation: builds OHLCV bars from tick data in real time
 //
