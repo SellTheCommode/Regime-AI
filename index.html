@@ -634,7 +634,7 @@ function nextBar(bars, sym, bias = 0) {
 //   Send: "authorize\n0\n\n{\"token\":\"...\"}"
 //   Send: "md/subscribeQuote\n1\n\n{\"symbol\":\"MNQM5\"}"
 //   Recv: "a[{\"e\":\"...\",...}]"  (Atmosphere-style)
-const TV_WS_URL = "wss://md.tradovateapi.com/v1/websocket";
+const TV_WS_URL = "wss://ict-regime-proxy.onrender.com/md";
 // Map our internal symbols to Tradovate front-month contract symbols
 // Update these quarterly when contracts roll
 // Current front month: June 2026 (M6)
