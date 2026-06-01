@@ -1018,7 +1018,13 @@ function App() {
                 }
                 catch (e) { } }, 2500);
             };
-            ws.onmessage = function (evt) { handleMessage(evt.data); };
+            ws.onmessage=function(evt){
+  if(evt.data instanceof Blob){
+    evt.data.text().then(function(text){handleMessage(text);});
+  } else {
+    handleMessage(evt.data);
+  }
+};
             ws.onerror = function () { L("warn", "MD WebSocket error"); setMdStatus("error"); };
             ws.onclose = function () {
                 clearInterval(heartbeatTimer);
